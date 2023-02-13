@@ -2,21 +2,10 @@ package com.example.lotlinmessenger
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.example.lotlinmessenger.databinding.ActivityMainBinding
-import com.example.lotlinmessenger.ui.ChatsFragment
-import com.example.lotlinmessenger.ui.SettingsFragment
+import com.example.lotlinmessenger.ui.fragments.ChatsFragment
 import com.example.lotlinmessenger.ui.objects.AppDrawer
-import com.mikepenz.materialdrawer.AccountHeader
-import com.mikepenz.materialdrawer.AccountHeaderBuilder
-import com.mikepenz.materialdrawer.Drawer
-import com.mikepenz.materialdrawer.DrawerBuilder
-import com.mikepenz.materialdrawer.model.DividerDrawerItem
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 
 class MainActivity : AppCompatActivity() {
 
