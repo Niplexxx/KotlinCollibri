@@ -4,7 +4,7 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lotlinmessenger.R
-import com.example.lotlinmessenger.ui.SettingsFragment
+import com.example.lotlinmessenger.ui.fragments.SettingsFragment
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer

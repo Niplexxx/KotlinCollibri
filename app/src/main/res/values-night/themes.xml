@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.LotlinMessenger" parent="MaterialDrawerTheme.Light">
         <!-- Primary brand color. -->
@@ -13,5 +13,6 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="android:colorPrimaryDark">@drawable/head</item>
+        <item name="popupTheme">@style/actionMenu</item>
     </style>
 </resources>
