@@ -1,13 +1,14 @@
 package com.example.lotlinmessenger
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.lotlinmessenger.activities.RegisterActivity
 import com.example.lotlinmessenger.databinding.ActivityMainBinding
 import com.example.lotlinmessenger.ui.fragments.ChatsFragment
 import com.example.lotlinmessenger.ui.objects.AppDrawer
+import com.example.lotlinmessenger.utillits.replaceActivity
+import com.example.lotlinmessenger.utillits.replaceFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,14 +29,12 @@ class MainActivity : AppCompatActivity() {
     }
     //Menu function
     private fun initFunc() {
-        if (false){
+        if (false) {
             setSupportActionBar(mToolbar)
             mAppDrawer.create()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.dataContainer, ChatsFragment()).commit()
-        } else{
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            replaceFragment(ChatsFragment())
+        } else {
+            replaceActivity(RegisterActivity())
         }
     }
     private fun initFields() {

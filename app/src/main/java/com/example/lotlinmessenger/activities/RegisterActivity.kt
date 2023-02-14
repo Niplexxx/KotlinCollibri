@@ -1,13 +1,17 @@
 package com.example.lotlinmessenger.activities
 
-import androidx.appcompat.app.AppCompatActivity
+import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.databinding.ActivityRegisterBinding
 import com.example.lotlinmessenger.ui.fragments.EnterPhoneNumberFragment
+import com.example.lotlinmessenger.utillits.replaceFragment
 
 private lateinit var mBinding: ActivityRegisterBinding
+
+@SuppressLint("StaticFieldLeak")
 private lateinit var mToolbar: Toolbar
 
 class RegisterActivity : AppCompatActivity() {
@@ -22,8 +26,6 @@ class RegisterActivity : AppCompatActivity() {
         mToolbar = mBinding.registerToolbar
         setSupportActionBar(mToolbar)
         title = getString(R.string.register_title_your_phone)
-        supportFragmentManager.beginTransaction()
-            .add(R.id.registerDataContainer, EnterPhoneNumberFragment())
-            .commit()
+        replaceFragment(EnterPhoneNumberFragment())
     }
 }
