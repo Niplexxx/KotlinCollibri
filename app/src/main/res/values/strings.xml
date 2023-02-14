@@ -22,4 +22,8 @@
     <string name="register_toast_enter_phone">Введите номер телефона</string>
     <string name="number_phone">+71234567890</string>
     <string name="btn_text_next">Далее</string>
+    <string name="settings_hint_name">Имя</string>
+    <string name="settings_hint_surname">Фамилия</string>
+    <string name="settings_toast_name_is_empty">Имя не может быть пустым</string>
+    <string name="settings_data_update">Данные обновлены</string>
 </resources>

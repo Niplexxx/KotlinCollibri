@@ -8,6 +8,7 @@ import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.activities.RegisterActivity
 import com.example.lotlinmessenger.utillits.AUTH
 import com.example.lotlinmessenger.utillits.replaceActivity
+import com.example.lotlinmessenger.utillits.replaceFragment
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
 
@@ -26,6 +27,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
                 AUTH.signOut()
                 (activity as MainActivity).replaceActivity(RegisterActivity())
             }
+            R.id.settings_menu_change_name -> replaceFragment(ChangeNameFragment())
         }
         return true
     }

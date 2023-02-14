@@ -10,5 +10,6 @@
         <item name="android:padding">@dimen/appPadding</item>
         <item name="android:autofillHints" />
         <item name="android:maxLines">1</item>
+        <item name="minHeight">48dp</item>
     </style>
 </resources>
