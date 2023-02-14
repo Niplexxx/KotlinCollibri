@@ -11,7 +11,9 @@
         style="@style/editText"
         android:autofillHints=""
         android:backgroundTint="@color/material_default"
+        android:hint="@string/number_phone"
         android:inputType="phone"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,7 +26,7 @@
         android:layout_margin="@dimen/horizontal_margin"
         android:backgroundTint="@color/material_default"
         android:contentDescription="@string/switching_to_another_window"
-        android:text="Далее"
+        android:text="@string/btn_text_next"
         android:textColor="@color/material_drawer_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

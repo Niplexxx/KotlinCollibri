@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.databinding.ActivityRegisterBinding
 import com.example.lotlinmessenger.ui.fragments.EnterPhoneNumberFragment
+import com.example.lotlinmessenger.utillits.initFirebase
 import com.example.lotlinmessenger.utillits.replaceFragment
 
 private lateinit var mBinding: ActivityRegisterBinding
@@ -19,6 +20,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
+        initFirebase()
     }
 
     override fun onStart() {

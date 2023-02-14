@@ -20,4 +20,6 @@
     <string name="register_title_your_phone">Ваш телефон</string>
     <string name="switching_to_another_window">Switching to another window</string>
     <string name="register_toast_enter_phone">Введите номер телефона</string>
+    <string name="number_phone">+71234567890</string>
+    <string name="btn_text_next">Далее</string>
 </resources>
