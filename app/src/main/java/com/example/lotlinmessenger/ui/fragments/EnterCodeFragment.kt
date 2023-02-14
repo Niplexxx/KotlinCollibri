@@ -1,7 +1,6 @@
 package com.example.lotlinmessenger.ui.fragments
 
 import android.widget.EditText
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.lotlinmessenger.MainActivity
 import com.example.lotlinmessenger.R
@@ -18,14 +17,13 @@ class EnterCodeFragment(val phoneNumber: String, val id: String) :
     override fun onStart() {
         super.onStart()
         (activity as RegisterActivity).title = phoneNumber
-        view?.findViewById<EditText>(R.id.register_input_code)?.addTextChangedListener {
+        view?.findViewById<EditText>(R.id.register_input_code)?.addTextChangedListener(
             AppTextWatcher {
                 val string = view?.findViewById<EditText>(R.id.register_input_code)?.text.toString()
                 if (string.length == 6) {
                     enterCode()
                 }
-            }
-        }
+            })
     }
 
     private fun enterCode() {
