@@ -7,8 +7,10 @@ import com.example.lotlinmessenger.activities.RegisterActivity
 import com.example.lotlinmessenger.databinding.ActivityMainBinding
 import com.example.lotlinmessenger.ui.fragments.ChatsFragment
 import com.example.lotlinmessenger.ui.objects.AppDrawer
+import com.example.lotlinmessenger.utillits.AUTH
 import com.example.lotlinmessenger.utillits.replaceActivity
 import com.example.lotlinmessenger.utillits.replaceFragment
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     }
     //Menu function
     private fun initFunc() {
-        if (false) {
+        if (AUTH.currentUser != null) {
             setSupportActionBar(mToolbar)
             mAppDrawer.create()
             replaceFragment(ChatsFragment())
@@ -39,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     }
     private fun initFields() {
         mToolbar = mBinding.mainToolbar
-        mAppDrawer = AppDrawer(this,mToolbar)
+        mAppDrawer = AppDrawer(this, mToolbar)
+        AUTH = FirebaseAuth.getInstance()
     }
 }
