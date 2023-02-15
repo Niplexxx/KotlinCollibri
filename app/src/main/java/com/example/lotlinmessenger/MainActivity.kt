@@ -5,12 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.lotlinmessenger.activities.RegisterActivity
 import com.example.lotlinmessenger.databinding.ActivityMainBinding
+import com.example.lotlinmessenger.models.User
 import com.example.lotlinmessenger.ui.fragments.ChatsFragment
 import com.example.lotlinmessenger.ui.objects.AppDrawer
-import com.example.lotlinmessenger.utillits.AUTH
-import com.example.lotlinmessenger.utillits.initFirebase
-import com.example.lotlinmessenger.utillits.replaceActivity
-import com.example.lotlinmessenger.utillits.replaceFragment
+import com.example.lotlinmessenger.utillits.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,9 +37,18 @@ class MainActivity : AppCompatActivity() {
             replaceActivity(RegisterActivity())
         }
     }
+
     private fun initFields() {
         mToolbar = mBinding.mainToolbar
         mAppDrawer = AppDrawer(this, mToolbar)
         initFirebase()
+        initUser()
+    }
+
+    private fun initUser() {
+        REF_DATABASE_ROOT.child(NODE_USERS).child(UID)
+            .addListenerForSingleValueEvent(AppValueEventListener {
+                USER = it.getValue(User::class.java) ?: User()
+            })
     }
 }

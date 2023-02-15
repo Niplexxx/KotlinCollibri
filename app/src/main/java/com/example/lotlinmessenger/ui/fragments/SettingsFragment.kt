@@ -3,10 +3,12 @@ package com.example.lotlinmessenger.ui.fragments
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.TextView
 import com.example.lotlinmessenger.MainActivity
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.activities.RegisterActivity
 import com.example.lotlinmessenger.utillits.AUTH
+import com.example.lotlinmessenger.utillits.USER
 import com.example.lotlinmessenger.utillits.replaceActivity
 import com.example.lotlinmessenger.utillits.replaceFragment
 
@@ -15,6 +17,15 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
     override fun onResume() {
         super.onResume()
         setHasOptionsMenu(true)
+        initFields()
+    }
+
+    private fun initFields() {
+        view?.findViewById<TextView>(R.id.settings_bio)?.text = USER.bio
+        view?.findViewById<TextView>(R.id.settings_full_name)?.text = USER.fullname
+        view?.findViewById<TextView>(R.id.settings_phone_number)?.text = USER.phone
+        view?.findViewById<TextView>(R.id.settings_status)?.text = USER.status
+        view?.findViewById<TextView>(R.id.settings_username)?.text = USER.username
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
