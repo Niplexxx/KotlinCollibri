@@ -4,6 +4,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.lotlinmessenger.MainActivity
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.activities.RegisterActivity
@@ -26,6 +27,8 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         view?.findViewById<TextView>(R.id.settings_phone_number)?.text = USER.phone
         view?.findViewById<TextView>(R.id.settings_status)?.text = USER.status
         view?.findViewById<TextView>(R.id.settings_username)?.text = USER.username
+        view?.findViewById<ConstraintLayout>(R.id.settings_btn_change_username)
+            ?.setOnClickListener { replaceFragment(ChangeUsernameFragment()) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

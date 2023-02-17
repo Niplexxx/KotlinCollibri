@@ -14,8 +14,10 @@ class ChangeNameFragment : BaseFragment(R.layout.fragment_change_name) {
         super.onResume()
         setHasOptionsMenu(true)
         val fullnameList = USER.fullname.split(" ")
-        view?.findViewById<EditText>(R.id.settings_input_name)?.setText(fullnameList[0])
-        view?.findViewById<EditText>(R.id.settings_input_surname)?.setText(fullnameList[1])
+        if (fullnameList.size > 1) {
+            view?.findViewById<EditText>(R.id.settings_input_name)?.setText(fullnameList[0])
+            view?.findViewById<EditText>(R.id.settings_input_surname)?.setText(fullnameList[1])
+        } else view?.findViewById<EditText>(R.id.settings_input_name)?.setText(fullnameList[0])
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
