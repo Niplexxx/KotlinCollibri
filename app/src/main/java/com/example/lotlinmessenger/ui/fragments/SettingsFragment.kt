@@ -29,6 +29,8 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         view?.findViewById<TextView>(R.id.settings_username)?.text = USER.username
         view?.findViewById<ConstraintLayout>(R.id.settings_btn_change_username)
             ?.setOnClickListener { replaceFragment(ChangeUsernameFragment()) }
+        view?.findViewById<ConstraintLayout>(R.id.settings_btn_change_bio)
+            ?.setOnClickListener { replaceFragment(ChangeBioFragment()) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

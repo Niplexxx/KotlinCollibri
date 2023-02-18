@@ -1,18 +1,17 @@
 package com.example.lotlinmessenger.ui.fragments
 
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.widget.EditText
-import com.example.lotlinmessenger.MainActivity
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.utillits.*
 
 @Suppress("DEPRECATION")
-class ChangeNameFragment : BaseFragment(R.layout.fragment_change_name) {
+class ChangeNameFragment : BaseChangeFragment(R.layout.fragment_change_name) {
     override fun onResume() {
         super.onResume()
-        setHasOptionsMenu(true)
+        initFullnameList()
+    }
+
+    private fun initFullnameList() {
         val fullnameList = USER.fullname.split(" ")
         if (fullnameList.size > 1) {
             view?.findViewById<EditText>(R.id.settings_input_name)?.setText(fullnameList[0])
@@ -20,18 +19,7 @@ class ChangeNameFragment : BaseFragment(R.layout.fragment_change_name) {
         } else view?.findViewById<EditText>(R.id.settings_input_name)?.setText(fullnameList[0])
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        (activity as MainActivity).menuInflater.inflate(R.menu.settings_menu_confirm, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.settings_confirm_change -> changeName()
-        }
-        return true
-    }
-
-    private fun changeName() {
+    override fun change() {
         val name = view?.findViewById<EditText>(R.id.settings_input_name)?.text.toString()
         val surname = view?.findViewById<EditText>(R.id.settings_input_surname)?.text.toString()
         if (name.isEmpty()) {
