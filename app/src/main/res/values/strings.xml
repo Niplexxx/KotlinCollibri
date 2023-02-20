@@ -6,7 +6,7 @@
     <string name="settings_default_status">В сети</string>
     <string name="settings_text_account">Аккаунт</string>
     <string name="settings_default_namber">89633699669</string>
-    <string name="settings_label_phone_number">Нажмите для изменения телефона</string>
+    <string name="settings_label_phone_number">Ваш номер телефона</string>
     <string name="settings_default_login">andreypetrov</string>
     <string name="settings_label_login">Имя пользователя</string>
     <string name="settings_default_bio">Текст о себе</string>
