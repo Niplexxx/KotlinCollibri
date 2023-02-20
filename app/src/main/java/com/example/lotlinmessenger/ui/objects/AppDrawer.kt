@@ -7,6 +7,7 @@ import android.widget.ImageView
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.ui.fragments.ContactsFragment
+import com.example.lotlinmessenger.ui.fragments.InformationFragment
 import com.example.lotlinmessenger.ui.fragments.SettingsFragment
 import com.example.lotlinmessenger.utillits.APP_ACTIVITY
 import com.example.lotlinmessenger.utillits.USER
@@ -147,8 +148,9 @@ class AppDrawer {
 
     private fun clickToItem(position: Int) {
         when (position) {
-            6 -> APP_ACTIVITY.replaceFragment(SettingsFragment())
             2 -> APP_ACTIVITY.replaceFragment(ContactsFragment())
+            6 -> APP_ACTIVITY.replaceFragment(SettingsFragment())
+            7 -> APP_ACTIVITY.replaceFragment(InformationFragment())
         }
     }
 }
