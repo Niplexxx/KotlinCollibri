@@ -6,6 +6,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorBlue">#165069</color>
 
     <!-- OVERWRITE THESE COLORS FOR A LIGHT THEME -->
     <!-- MaterialDrawer DEFAULT colors -->
@@ -23,4 +24,6 @@
     <color name="material_drawer_header_selection_text">@color/white</color>
     <color name="material_drawer_header_selection_subtext">@color/white</color>
     <color name="material_default">#143952</color>
+    <color name="color_time_chat">#2B718F</color>
+    <color name="colorBlueWish">#E5F3FA</color>
 </resources>

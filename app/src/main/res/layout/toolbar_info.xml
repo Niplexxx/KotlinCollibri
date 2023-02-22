@@ -2,16 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/settingsButtons"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/app_margin">
+    android:layout_height="?attr/actionBarSize"
+    android:background="@drawable/head">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/contact_photo"
-        android:layout_width="@dimen/settings_user_photo_width"
-        android:layout_height="@dimen/settings_btn_change_photo_height"
+        android:id="@+id/toolbar_image"
+        android:layout_width="@dimen/toolbar_image_width"
+        android:layout_height="@dimen/toolbar_image_height"
         android:src="@drawable/img_user_default"
+        app:civ_circle_background_color="@color/material_default"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -19,14 +19,17 @@
     <TextView
         android:id="@+id/contact_fullname"
         style="@style/normalText"
-        app:layout_constraintStart_toEndOf="@id/contact_photo"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/app_small_margin"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/toolbar_image"
+        app:layout_constraintTop_toTopOf="@id/toolbar_image"
         tools:text="Yura Petrov" />
 
     <TextView
         android:id="@+id/contact_status"
         style="@style/smallText"
-        app:layout_constraintStart_toEndOf="@id/contact_photo"
+        android:textColor="@color/material_drawer_header_selection_text"
+        app:layout_constraintStart_toEndOf="@+id/toolbar_image"
         app:layout_constraintTop_toBottomOf="@id/contact_fullname"
         tools:text="в сети" />
 
