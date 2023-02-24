@@ -13,6 +13,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
+import com.mikepenz.materialize.util.KeyboardUtil
 import de.hdodenhof.circleimageview.CircleImageView
 
 
@@ -29,6 +30,7 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
         super.onResume()
         APP_ACTIVITY.title = "Контакты"
         initRecycleView()
+        KeyboardUtil.hideKeyboard(activity)
     }
 
     private fun initRecycleView() {

@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.canhub.cropper.CropImage
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.utillits.*
+import com.mikepenz.materialize.util.KeyboardUtil
 import de.hdodenhof.circleimageview.CircleImageView
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
@@ -19,6 +20,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         APP_ACTIVITY.title = "Настройки"
         setHasOptionsMenu(true)
         initFields()
+        KeyboardUtil.hideKeyboard(activity)
     }
 
     private fun initFields() {

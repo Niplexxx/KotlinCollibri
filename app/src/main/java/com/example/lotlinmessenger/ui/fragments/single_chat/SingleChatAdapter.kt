@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.models.CommonModel
@@ -13,7 +14,8 @@ import com.example.lotlinmessenger.utillits.asTime
 
 class SingleChatAdapter : RecyclerView.Adapter<SingleChatAdapter.SingleChatHolder>() {
 
-    private var mListMessagesCache = emptyList<CommonModel>()
+    private var mListMessagesCache = mutableListOf<CommonModel>()
+    private lateinit var mDiffResult: DiffUtil.DiffResult
 
     class SingleChatHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -52,8 +54,23 @@ class SingleChatAdapter : RecyclerView.Adapter<SingleChatAdapter.SingleChatHolde
         }
     }
 
-    fun setList(list: List<CommonModel>) {
-        mListMessagesCache = list
-        notifyDataSetChanged()
+    fun addItem(
+        item: CommonModel,
+        toBottom: Boolean,
+        onSuccess: () -> Unit
+    ) {
+        if (toBottom) {
+            if (!mListMessagesCache.contains(item)) {
+                mListMessagesCache.add(item)
+                notifyItemInserted(mListMessagesCache.size)
+            }
+        } else {
+            if (!mListMessagesCache.contains(item)) {
+                mListMessagesCache.add(item)
+                mListMessagesCache.sortBy { it.timeStamp.toString() }
+                notifyItemInserted(0)
+            }
+        }
+        onSuccess()
     }
 }

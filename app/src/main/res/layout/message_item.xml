@@ -9,6 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bloc_user_message"
         android:layout_width="wrap_content"
+        app:layout_constraintWidth_min="48dp"
         android:layout_height="match_parent"
         android:layout_marginStart="100dp"
         android:background="@drawable/bg_user_message"
@@ -46,6 +47,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bloc_received_message"
         android:layout_width="wrap_content"
+        app:layout_constraintWidth_min="48dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="100dp"
         android:background="@drawable/bg_receiving_message"
@@ -59,6 +61,7 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:padding="@dimen/appPadding"
+            android:textAlignment="viewStart"
             android:textColor="@color/colorBlack"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
