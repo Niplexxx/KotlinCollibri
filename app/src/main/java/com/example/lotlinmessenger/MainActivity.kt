@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import com.example.lotlinmessenger.activities.RegisterActivity
 import com.example.lotlinmessenger.databinding.ActivityMainBinding
-import com.example.lotlinmessenger.ui.fragments.ChatsFragment
+import com.example.lotlinmessenger.ui.fragments.MainFragment
+import com.example.lotlinmessenger.ui.fragments.register.EnterPhoneNumberFragment
 import com.example.lotlinmessenger.ui.objects.AppDrawer
 import com.example.lotlinmessenger.utillits.*
 import kotlinx.coroutines.CoroutineScope
@@ -38,12 +38,12 @@ class MainActivity : AppCompatActivity() {
 
     //Menu function
     private fun initFunc() {
+        setSupportActionBar(mToolbar)
         if (AUTH.currentUser != null) {
-            setSupportActionBar(mToolbar)
             mAppDrawer.create()
-            replaceFragment(ChatsFragment(), false)
+            replaceFragment(MainFragment(), false)
         } else {
-            replaceActivity(RegisterActivity())
+            replaceFragment(EnterPhoneNumberFragment(), false)
         }
     }
 

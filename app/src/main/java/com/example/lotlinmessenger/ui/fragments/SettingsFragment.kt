@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.canhub.cropper.CropImage
 import com.example.lotlinmessenger.R
-import com.example.lotlinmessenger.activities.RegisterActivity
 import com.example.lotlinmessenger.utillits.*
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -59,7 +58,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
             R.id.settings_menu_exit -> {
                 AppStates.updateState(AppStates.OFFLINE)
                 AUTH.signOut()
-                APP_ACTIVITY.replaceActivity(RegisterActivity())
+                restartActivity()
             }
             R.id.settings_menu_change_name -> replaceFragment(ChangeNameFragment())
         }

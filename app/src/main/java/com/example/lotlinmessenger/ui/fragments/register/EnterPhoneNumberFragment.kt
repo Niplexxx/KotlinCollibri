@@ -1,15 +1,10 @@
-package com.example.lotlinmessenger.ui.fragments
+package com.example.lotlinmessenger.ui.fragments.register
 
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
-import com.example.lotlinmessenger.MainActivity
 import com.example.lotlinmessenger.R
-import com.example.lotlinmessenger.activities.RegisterActivity
-import com.example.lotlinmessenger.utillits.AUTH
-import com.example.lotlinmessenger.utillits.replaceActivity
-import com.example.lotlinmessenger.utillits.replaceFragment
-import com.example.lotlinmessenger.utillits.showToast
+import com.example.lotlinmessenger.utillits.*
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
@@ -28,7 +23,7 @@ class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) 
                 AUTH.signInWithCredential(credential).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         showToast("Добро пожаловать")
-                        (activity as RegisterActivity).replaceActivity(MainActivity())
+                        restartActivity()
                     } else showToast(task.exception?.message.toString())
                 }
             }
@@ -61,7 +56,7 @@ class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) 
             mPhoneNumber,
             60,
             TimeUnit.SECONDS,
-            activity as RegisterActivity,
+            APP_ACTIVITY,
             mCallback
         )
     }

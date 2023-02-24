@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.models.CommonModel
+import com.example.lotlinmessenger.ui.fragments.single_chat.SingleChatFragment
 import com.example.lotlinmessenger.utillits.*
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions

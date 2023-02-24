@@ -1,10 +1,8 @@
-package com.example.lotlinmessenger.ui.fragments
+package com.example.lotlinmessenger.ui.fragments.register
 
 import android.widget.EditText
 import androidx.fragment.app.Fragment
-import com.example.lotlinmessenger.MainActivity
 import com.example.lotlinmessenger.R
-import com.example.lotlinmessenger.activities.RegisterActivity
 import com.example.lotlinmessenger.utillits.*
 import com.google.firebase.auth.PhoneAuthProvider
 
@@ -13,7 +11,7 @@ class EnterCodeFragment(val phoneNumber: String, val id: String) :
 
     override fun onStart() {
         super.onStart()
-        (activity as RegisterActivity).title = phoneNumber
+        APP_ACTIVITY.title = phoneNumber
         view?.findViewById<EditText>(R.id.register_input_code)?.addTextChangedListener(
             AppTextWatcher {
                 val string = view?.findViewById<EditText>(R.id.register_input_code)?.text.toString()
@@ -39,7 +37,7 @@ class EnterCodeFragment(val phoneNumber: String, val id: String) :
                         REF_DATABASE_ROOT.child(NODE_USERS).child(uid).updateChildren(dateMap)
                             .addOnSuccessListener {
                                 showToast("Добро пожаловать")
-                                (activity as RegisterActivity).replaceActivity(MainActivity())
+                                restartActivity()
                             }
                             .addOnFailureListener { showToast(it.message.toString()) }
                     }
