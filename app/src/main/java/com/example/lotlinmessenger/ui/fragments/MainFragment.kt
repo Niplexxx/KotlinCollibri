@@ -8,7 +8,7 @@ import com.mikepenz.materialize.util.KeyboardUtil.hideKeyboard
 class MainFragment : Fragment(R.layout.fragment_chats) {
     override fun onResume() {
         super.onResume()
-        APP_ACTIVITY.title = "Чаты"
+        APP_ACTIVITY.title = "Группы"
         APP_ACTIVITY.mAppDrawer.enableDrawer()
         hideKeyboard(activity)
     }

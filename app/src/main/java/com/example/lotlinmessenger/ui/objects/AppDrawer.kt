@@ -105,9 +105,9 @@ class AppDrawer {
                 //Menu block 2
                 PrimaryDrawerItem().withIdentifier(101)
                     .withIconTintingEnabled(true)
-                    .withName("Контакты")
+                    .withName("Личные сообщения")
                     .withSelectable(false)
-                    .withIcon(R.drawable.img_people),
+                    .withIcon(R.drawable.img_personal_chat),
                 //Menu block 3
                 PrimaryDrawerItem().withIdentifier(102)
                     .withIconTintingEnabled(true)
@@ -125,7 +125,7 @@ class AppDrawer {
                 //Menu block 5
                 PrimaryDrawerItem().withIdentifier(104)
                     .withIconTintingEnabled(true)
-                    .withName("Настройки")
+                    .withName("Личный кабинет")
                     .withSelectable(false)
                     .withIcon(R.drawable.img_handyman),
                 //Menu block 6

@@ -28,7 +28,7 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
 
     override fun onResume() {
         super.onResume()
-        APP_ACTIVITY.title = "Контакты"
+        APP_ACTIVITY.title = "Личные сообщения"
         initRecycleView()
         KeyboardUtil.hideKeyboard(activity)
     }
