@@ -1,10 +1,14 @@
 package com.example.lotlinmessenger
 
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
+import com.canhub.cropper.CropImage
 import com.example.lotlinmessenger.databinding.ActivityMainBinding
 import com.example.lotlinmessenger.ui.fragments.MainFragment
 import com.example.lotlinmessenger.ui.fragments.register.EnterPhoneNumberFragment
@@ -54,6 +58,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        APP_ACTIVITY =this
         AppStates.updateState(AppStates.ONLINE)
     }
 
@@ -74,6 +79,21 @@ class MainActivity : AppCompatActivity() {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             initContacts()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
+            && resultCode == Activity.RESULT_OK && data != null){
+            val uri = CropImage.getCaptureImageOutputUriFilePath(this).toUri()
+            val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)
+                .child(CURRENT_UID)
+            path.putFile(uri).addOnCompleteListener {
+                if (it.isSuccessful){
+                    showToast(getString(R.string.toast_data_update))
+                }
+            }
         }
     }
 }

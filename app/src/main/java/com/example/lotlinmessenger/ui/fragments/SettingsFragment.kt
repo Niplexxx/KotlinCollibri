@@ -1,37 +1,29 @@
 package com.example.lotlinmessenger.ui.fragments
 
+import android.app.Activity
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.net.toUri
 import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
+import com.example.lotlinmessenger.MainActivity
 import com.example.lotlinmessenger.R
-import com.example.lotlinmessenger.models.UserModel
 import com.example.lotlinmessenger.utillits.*
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
 import com.mikepenz.materialize.util.KeyboardUtil
 import de.hdodenhof.circleimageview.CircleImageView
 
-class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
-    private lateinit var settings_shange_photo: CircleImageView
-    private var storageRef = Firebase.storage
-    private lateinit var uri: Uri
 
+class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
 
     override fun onResume() {
         super.onResume()
@@ -56,46 +48,34 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
     }
 
     private fun changePhotoUser() {
-//        storageRef = FirebaseStorage.getInstance()
-//        val galleryImage = registerForActivityResult(
-//            ActivityResultContracts.GetContent(),
-//            ActivityResultCallback {
-//                settings_shange_photo.setImageURI(it)
-//                if (it != null) {
-//                    uri = it
-//                }
-//            }
-//        )
-//        galleryImage.launch("image/*")
-//        storageRef.getReference("images").child(System.currentTimeMillis().toString())
-//            .putFile(uri)
-//            .addOnSuccessListener { task ->
-//                task.metadata?.reference?.downloadUrl
-//                    ?.addOnSuccessListener {
-//                        val userId = FirebaseAuth.getInstance().currentUser!!.uid
-//                        val mapImages = mapOf(
-//                            "uri" to it.toString()
-//                        )
-//                        val databaseReference = FirebaseDatabase.getInstance().getReference("userImages")
-//                        databaseReference.child(userId).setValue(mapImages)
-//                            .addOnSuccessListener {
-//                                showToast("Изображение загружено")
-//                            }
-//                            .addOnFailureListener{error ->
-//                                showToast("Произошла ошибка!")
-//                            }
-//                    }
-//            }
+        startCrop(APP_ACTIVITY)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
-            && resultCode == RESULT_OK && data != null
-        ) {
-            val uri = CropImage
-            val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)
-                .child(CURRENT_UID)
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            // Use the returned uri.
+            val uriContent = result.uriContent
+            val uriFilePath = context?.let { result.getUriFilePath(it) } // optional usage
+        } else {
+            // An error occurred.
+            val exception = result.error
         }
+    }
+    private fun startCrop(APP_ACTIVITY: MainActivity) {
+        // Start picker to get image for cropping and then use the image in cropping activity.
+        cropImage.launch(
+            options {
+                setGuidelines(CropImageView.Guidelines.ON)
+            }
+        )
+
+        // Start cropping activity for pre-acquired image saved on the device and customize settings.
+        cropImage.launch(
+            options(uri = Uri.EMPTY) {
+                setGuidelines(CropImageView.Guidelines.ON)
+                setOutputCompressFormat(Bitmap.CompressFormat.PNG)
+            }
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
