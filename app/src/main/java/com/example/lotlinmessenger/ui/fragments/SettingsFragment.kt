@@ -68,14 +68,6 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
                 setGuidelines(CropImageView.Guidelines.ON)
             }
         )
-
-        // Start cropping activity for pre-acquired image saved on the device and customize settings.
-        cropImage.launch(
-            options(uri = Uri.EMPTY) {
-                setGuidelines(CropImageView.Guidelines.ON)
-                setOutputCompressFormat(Bitmap.CompressFormat.PNG)
-            }
-        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

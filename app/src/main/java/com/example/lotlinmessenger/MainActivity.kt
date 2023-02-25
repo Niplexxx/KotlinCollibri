@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mBinding: ActivityMainBinding
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         APP_ACTIVITY = this
         initFirebase()
         initUser {
+            REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
             CoroutineScope(Dispatchers.IO).launch {
                 initContacts()
             }
@@ -38,7 +40,6 @@ class MainActivity : AppCompatActivity() {
             initFunc()
         }
     }
-
 
     //Menu function
     private fun initFunc() {
@@ -84,9 +85,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
-            && resultCode == Activity.RESULT_OK && data != null){
-            val uri = CropImage.getCaptureImageOutputUriFilePath(this).toUri()
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null){
+            val uri = CropImage.CROP_IMAGE_EXTRA_RESULT.toUri()
             val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)
                 .child(CURRENT_UID)
             path.putFile(uri).addOnCompleteListener {
