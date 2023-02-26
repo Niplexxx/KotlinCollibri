@@ -86,3 +86,7 @@ fun String.asTime(): String {
     val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
     return timeFormat.format(time)
 }
+
+fun getPlurals(count:Int) = APP_ACTIVITY.resources.getQuantityString(
+    R.plurals.count_members,count,count
+)

@@ -6,11 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.database.NODE_MAIN_LIST
 import com.example.lotlinmessenger.models.CommonModel
+import com.example.lotlinmessenger.ui.fragments.BaseFragment
 import com.example.lotlinmessenger.utillits.*
 import com.mikepenz.materialize.util.KeyboardUtil.hideKeyboard
 import de.hdodenhof.circleimageview.CircleImageView
 
-class AddContactsFragment : Fragment(R.layout.fragment_add_contacts) {
+class AddContactsFragment : BaseFragment(R.layout.fragment_add_contacts) {
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: AddContactsAdapter
     private val mRefMainList = REF_DATABASE_ROOT.child(NODE_MAIN_LIST).child(CURRENT_UID)
@@ -19,15 +20,14 @@ class AddContactsFragment : Fragment(R.layout.fragment_add_contacts) {
     private var mListItems = listOf<CommonModel>()
 
     override fun onResume() {
+        listContacts.clear()
         super.onResume()
         APP_ACTIVITY.title = "Добавить участника"
-        APP_ACTIVITY.mAppDrawer.enableDrawer()
         hideKeyboard(activity)
         initRecyclerView()
         view?.findViewById<Button>(R.id.add_contacts_btn_next)?.setOnClickListener {
-            listContacts.forEach {
-                println(it.id)
-            }
+            if (listContacts.isEmpty()) showToast("Добавьте участника")
+            else replaceFragment(CreateGroupFragment(listContacts))
         }
     }
 
