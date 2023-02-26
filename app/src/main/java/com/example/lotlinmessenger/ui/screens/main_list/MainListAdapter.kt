@@ -7,7 +7,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.models.CommonModel
+import com.example.lotlinmessenger.ui.screens.groups.GroupChatFragment
 import com.example.lotlinmessenger.ui.screens.single_chat.SingleChatFragment
+import com.example.lotlinmessenger.utillits.TYPE_CHAT
+import com.example.lotlinmessenger.utillits.TYPE_GROUP
 import com.example.lotlinmessenger.utillits.downloadAndSetImage
 import com.example.lotlinmessenger.utillits.replaceFragment
 import de.hdodenhof.circleimageview.CircleImageView
@@ -26,12 +29,15 @@ class MainListAdapter : RecyclerView.Adapter<MainListAdapter.MainListHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainListHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.main_list_item, parent, false)
+
         val holder = MainListHolder(view)
         holder.itemView.setOnClickListener {
-            replaceFragment(SingleChatFragment(listItems[holder.adapterPosition]))
+            when(listItems[holder.adapterPosition].type){
+                TYPE_CHAT ->replaceFragment(SingleChatFragment(listItems[holder.adapterPosition]))
+                TYPE_GROUP -> replaceFragment(GroupChatFragment(listItems[holder.adapterPosition]))
+            }
         }
         return holder
-        return MainListHolder(view)
     }
 
     override fun getItemCount(): Int = listItems.size

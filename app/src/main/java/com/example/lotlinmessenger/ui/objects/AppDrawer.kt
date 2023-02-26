@@ -109,27 +109,15 @@ class AppDrawer {
                     .withName("Мои контакты")
                     .withSelectable(false)
                     .withIcon(R.drawable.img_personal_chat),
-                //Menu block 3
-                PrimaryDrawerItem().withIdentifier(102)
-                    .withIconTintingEnabled(true)
-                    .withName("Звонки")
-                    .withSelectable(false)
-                    .withIcon(R.drawable.img_call),
-                //Menu block 4
-                PrimaryDrawerItem().withIdentifier(103)
-                    .withIconTintingEnabled(true)
-                    .withName("Избранное")
-                    .withSelectable(false)
-                    .withIcon(R.drawable.img_bookmark_add),
                 //Menu lines
                 DividerDrawerItem(),
-                //Menu block 5
+                //Menu block 3
                 PrimaryDrawerItem().withIdentifier(104)
                     .withIconTintingEnabled(true)
                     .withName("Личный кабинет")
                     .withSelectable(false)
                     .withIcon(R.drawable.img_handyman),
-                //Menu block 6
+                //Menu block 4
                 PrimaryDrawerItem().withIdentifier(105)
                     .withIconTintingEnabled(true)
                     .withName("Информация")
@@ -151,8 +139,8 @@ class AppDrawer {
         when (position) {
             1 -> replaceFragment(AddContactsFragment())
             2 -> replaceFragment(ContactsFragment())
-            6 -> replaceFragment(SettingsFragment())
-            7 -> replaceFragment(InformationFragment())
+            4 -> replaceFragment(SettingsFragment())
+            5 -> replaceFragment(InformationFragment())
         }
     }
 }
