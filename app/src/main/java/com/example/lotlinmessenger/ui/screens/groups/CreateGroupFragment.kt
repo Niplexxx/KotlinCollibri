@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotlinmessenger.R
+import com.example.lotlinmessenger.database.createGroupToDatabase
 import com.example.lotlinmessenger.models.CommonModel
 import com.example.lotlinmessenger.ui.fragments.BaseFragment
 import com.example.lotlinmessenger.ui.screens.main_list.MainListFragment

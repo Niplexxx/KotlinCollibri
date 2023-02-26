@@ -3,6 +3,7 @@ package com.example.lotlinmessenger.ui.screens.register
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.example.lotlinmessenger.R
+import com.example.lotlinmessenger.database.*
 import com.example.lotlinmessenger.utillits.*
 import com.google.firebase.auth.PhoneAuthProvider
 

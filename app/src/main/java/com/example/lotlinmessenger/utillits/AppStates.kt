@@ -1,5 +1,7 @@
 package com.example.lotlinmessenger.utillits
 
+import com.example.lotlinmessenger.database.*
+
 enum class AppStates(val state: String) {
     /* Класс перечисление состояний приложения*/
 

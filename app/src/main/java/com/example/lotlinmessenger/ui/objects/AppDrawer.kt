@@ -11,7 +11,7 @@ import com.example.lotlinmessenger.ui.screens.InformationFragment
 import com.example.lotlinmessenger.ui.screens.groups.AddContactsFragment
 import com.example.lotlinmessenger.ui.screens.settings.SettingsFragment
 import com.example.lotlinmessenger.utillits.APP_ACTIVITY
-import com.example.lotlinmessenger.utillits.USER
+import com.example.lotlinmessenger.database.USER
 import com.example.lotlinmessenger.utillits.downloadAndSetImage
 import com.example.lotlinmessenger.utillits.replaceFragment
 import com.mikepenz.materialdrawer.AccountHeader

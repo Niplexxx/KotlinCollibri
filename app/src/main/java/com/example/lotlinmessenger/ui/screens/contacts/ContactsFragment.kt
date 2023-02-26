@@ -6,6 +6,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotlinmessenger.R
+import com.example.lotlinmessenger.database.CURRENT_UID
+import com.example.lotlinmessenger.database.NODE_PHONES_CONTACTS
+import com.example.lotlinmessenger.database.NODE_USERS
+import com.example.lotlinmessenger.database.REF_DATABASE_ROOT
 import com.example.lotlinmessenger.models.CommonModel
 import com.example.lotlinmessenger.ui.fragments.BaseFragment
 import com.example.lotlinmessenger.ui.screens.single_chat.SingleChatFragment

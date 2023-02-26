@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.models.CommonModel
-import com.example.lotlinmessenger.utillits.CURRENT_UID
+import com.example.lotlinmessenger.database.CURRENT_UID
 import com.example.lotlinmessenger.utillits.asTime
 
 class SingleChatAdapter : RecyclerView.Adapter<SingleChatAdapter.SingleChatHolder>() {

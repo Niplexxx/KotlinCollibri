@@ -23,7 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.net.Uri
 import android.view.*
-import com.example.lotlinmessenger.database.NODE_GROUPS
+import com.example.lotlinmessenger.database.*
 import com.example.lotlinmessenger.ui.screens.main_list.MainListFragment
 
 
@@ -90,7 +90,8 @@ class GroupChatFragment(private val group: CommonModel) :
                             //TODO stop record
                             view?.findViewById<ImageView>(R.id.chat_btn_voice)?.colorFilter = null
                             mAppVoiceRecorder.stopRecord { file, messageKey ->
-                                uploadFileToStorage(Uri.fromFile(file),messageKey)
+                                uploadFileToStorage(Uri.fromFile(file),messageKey,group.id, TYPE_MESSAGE_VOICE)
+                                mSmoothScrollToPosition = true
                             }
                         }
                     }

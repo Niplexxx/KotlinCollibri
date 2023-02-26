@@ -10,6 +10,8 @@ import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import com.example.lotlinmessenger.MainActivity
 import com.example.lotlinmessenger.R
+import com.example.lotlinmessenger.database.AUTH
+import com.example.lotlinmessenger.database.USER
 import com.example.lotlinmessenger.ui.fragments.BaseFragment
 import com.example.lotlinmessenger.utillits.*
 import com.mikepenz.materialize.util.KeyboardUtil

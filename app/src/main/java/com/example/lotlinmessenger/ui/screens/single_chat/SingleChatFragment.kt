@@ -23,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.net.Uri
 import android.view.*
+import com.example.lotlinmessenger.database.*
 import com.example.lotlinmessenger.ui.screens.main_list.MainListFragment
 
 
@@ -70,13 +71,10 @@ class SingleChatFragment(private var contact: CommonModel) :
                     view?.findViewById<ImageView>(R.id.chat_btn_voice)?.visibility = View.GONE
                 }
             })
-
-
             CoroutineScope(Dispatchers.IO).launch {
             view?.findViewById<ImageView>(R.id.chat_btn_voice)?.setOnTouchListener { v, event ->
                 if (checkPermission(RECORD_AUDIO)) {
                     if (event.action == MotionEvent.ACTION_DOWN) {
-                            //TODO record
                         view?.findViewById<ImageView>(R.id.chat_btn_voice)?.setColorFilter(
                             ContextCompat.getColor(
                                 APP_ACTIVITY,
@@ -86,17 +84,16 @@ class SingleChatFragment(private var contact: CommonModel) :
                         val messageKey = getMessageKey(contact.id)
                         mAppVoiceRecorder.startRecord(messageKey)
                     } else if (event.action == MotionEvent.ACTION_UP) {
-                            //TODO stop record
                             view?.findViewById<ImageView>(R.id.chat_btn_voice)?.colorFilter = null
                             mAppVoiceRecorder.stopRecord { file, messageKey ->
-                                uploadFileToStorage(Uri.fromFile(file),messageKey)
+                                uploadFileToStorage(Uri.fromFile(file),messageKey, contact.id, TYPE_MESSAGE_VOICE)
+                                mSmoothScrollToPosition = true
                             }
                         }
                     }
                     true
                 }
             }
-
     }
 
     private fun initRecycleView() {

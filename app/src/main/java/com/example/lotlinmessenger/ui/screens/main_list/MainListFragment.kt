@@ -3,12 +3,10 @@ package com.example.lotlinmessenger.ui.screens.main_list
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotlinmessenger.R
-import com.example.lotlinmessenger.database.NODE_GROUPS
-import com.example.lotlinmessenger.database.NODE_MAIN_LIST
+import com.example.lotlinmessenger.database.*
 import com.example.lotlinmessenger.models.CommonModel
 import com.example.lotlinmessenger.utillits.*
 import com.mikepenz.materialize.util.KeyboardUtil.hideKeyboard
-import de.hdodenhof.circleimageview.CircleImageView
 
 class MainListFragment : Fragment(R.layout.fragment_main_list) {
     private lateinit var mRecyclerView: RecyclerView

@@ -1,46 +1,19 @@
-package com.example.lotlinmessenger.utillits
+package com.example.lotlinmessenger.database
 
 import android.net.Uri
 import com.example.lotlinmessenger.R
-import com.example.lotlinmessenger.database.*
 import com.example.lotlinmessenger.models.CommonModel
 import com.example.lotlinmessenger.models.UserModel
+import com.example.lotlinmessenger.utillits.APP_ACTIVITY
+import com.example.lotlinmessenger.utillits.AppValueEventListener
+import com.example.lotlinmessenger.utillits.TYPE_GROUP
+import com.example.lotlinmessenger.utillits.showToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-
-lateinit var AUTH: FirebaseAuth
-lateinit var CURRENT_UID: String
-lateinit var REF_DATABASE_ROOT: DatabaseReference
-lateinit var REF_STORAGE_ROOT: StorageReference
-lateinit var USER: UserModel
-
-const val TYPE_TEXT = "text"
-
-const val NODE_USERS = "users"
-const val NODE_MESSAGES = "messages"
-const val NODE_USERNAMES = "usernames"
-const val NODE_PHONES = "phones"
-const val FOLDER_PROFILE_IMAGE = "profile_image"
-
-
-const val CHILD_ID = "id"
-const val CHILD_PHONE = "phone"
-const val NODE_PHONES_CONTACTS = "phones_contacts"
-const val CHILD_USERNAME = "username"
-const val CHILD_FULLNAME = "fullname"
-const val CHILD_BIO = "bio"
-const val CHILD_PHOTO_URL = "photoUrl"
-const val CHILD_STATE = "state"
-const val CHILD_TEXT = "text"
-const val CHILD_TYPE = "type"
-const val CHILD_FROM = "from"
-const val CHILD_TIMESTAMP = "timeStamp"
-const val CHILD_FILE_URL = "fileUrl"
 
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
@@ -76,7 +49,6 @@ fun updatePhonesToDatabase(arrayContacts: ArrayList<CommonModel>) {
                             .child(snapshot.value.toString()).child(CHILD_FULLNAME)
                             .setValue(contact.fullname)
                             .addOnFailureListener { showToast(it.message.toString()) }
-
                     }
                 }
             }
@@ -159,8 +131,48 @@ fun getMessageKey(id: String) = REF_DATABASE_ROOT.child(
 ).child(CURRENT_UID)
     .child(id).push().key.toString()
 
-fun uploadFileToStorage(fromFile: Uri?, messageKey: String) {
-    showToast("Record OK")
+inline fun putFileToStorage(uri: Uri, path: StorageReference, crossinline function: () -> Unit) {
+    /* Функция высшего порядка, отправляет картинку в хранилище */
+    path.putFile(uri)
+        .addOnSuccessListener { function() }
+        .addOnFailureListener { showToast(it.message.toString()) }
+
+}
+
+inline fun getUrlFromStorage(path: StorageReference, crossinline function: (url: String) -> Unit) {
+    /* Функция высшего порядка, получает  URL картинки из хранилища */
+    path.downloadUrl
+        .addOnSuccessListener { function(it.toString()) }
+        .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun uploadFileToStorage(uri: Uri, messageKey: String, receivedID: String, typeMessage: String) {
+    val path = REF_STORAGE_ROOT.child(FOLDER_FILES).child(messageKey)
+    putFileToStorage(uri, path) {
+        getUrlFromStorage(path) {
+            sendMessageAsFile(receivedID, it, messageKey, typeMessage)
+        }
+    }
+}
+
+fun sendMessageAsFile(receivingUserID: String, fileUrl: String, messageKey: String, typeMessage: String) {
+    val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserID"
+    val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserID/$CURRENT_UID"
+
+    val mapMessage = hashMapOf<String, Any>()
+    mapMessage[CHILD_FROM] = CURRENT_UID
+    mapMessage[CHILD_TYPE] = typeMessage
+    mapMessage[CHILD_ID] = messageKey
+    mapMessage[CHILD_TIMESTAMP] = ServerValue.TIMESTAMP
+    mapMessage[CHILD_FILE_URL] = fileUrl
+
+    val mapDialog = hashMapOf<String, Any>()
+    mapDialog["$refDialogUser/$messageKey"] = mapMessage
+    mapDialog["$refDialogReceivingUser/$messageKey"] = mapMessage
+
+    REF_DATABASE_ROOT
+        .updateChildren(mapDialog)
+        .addOnFailureListener { showToast(it.message.toString()) }
 }
 
 fun saveToMainList(id: String, type: String) {

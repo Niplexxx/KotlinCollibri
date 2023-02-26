@@ -1,18 +1,19 @@
+@file:Suppress("UNUSED_EXPRESSION")
+
 package com.example.lotlinmessenger
 
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import com.canhub.cropper.CropImage
+import com.example.lotlinmessenger.database.*
 import com.example.lotlinmessenger.databinding.ActivityMainBinding
+import com.example.lotlinmessenger.ui.objects.AppDrawer
 import com.example.lotlinmessenger.ui.screens.main_list.MainListFragment
 import com.example.lotlinmessenger.ui.screens.register.EnterPhoneNumberFragment
-import com.example.lotlinmessenger.ui.objects.AppDrawer
 import com.example.lotlinmessenger.utillits.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -85,15 +86,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null){
-            val uri = CropImage.CROP_IMAGE_EXTRA_RESULT.toUri()
-            val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)
-                .child(CURRENT_UID)
-            path.putFile(uri).addOnCompleteListener {
-                if (it.isSuccessful){
-                    showToast(getString(R.string.toast_data_update))
-                }
+            if (resultCode == RESULT_OK) {
+                val uri = CropImage.getCaptureImageOutputUriContent(this)
+                val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)
+                    .child(CURRENT_UID)
             }
         }
     }
-}

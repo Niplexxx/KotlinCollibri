@@ -4,6 +4,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.example.lotlinmessenger.R
+import com.example.lotlinmessenger.database.AUTH
 import com.example.lotlinmessenger.utillits.*
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential

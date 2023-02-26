@@ -2,6 +2,8 @@ package com.example.lotlinmessenger.ui.screens.settings
 
 import android.widget.EditText
 import com.example.lotlinmessenger.R
+import com.example.lotlinmessenger.database.USER
+import com.example.lotlinmessenger.database.setBioToDatabase
 import com.example.lotlinmessenger.ui.fragments.BaseChangeFragment
 import com.example.lotlinmessenger.utillits.*
 

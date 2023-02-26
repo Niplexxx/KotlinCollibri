@@ -1,15 +1,13 @@
 package com.example.lotlinmessenger.ui.screens.groups
 
 import android.widget.Button
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotlinmessenger.R
-import com.example.lotlinmessenger.database.NODE_MAIN_LIST
+import com.example.lotlinmessenger.database.*
 import com.example.lotlinmessenger.models.CommonModel
 import com.example.lotlinmessenger.ui.fragments.BaseFragment
 import com.example.lotlinmessenger.utillits.*
 import com.mikepenz.materialize.util.KeyboardUtil.hideKeyboard
-import de.hdodenhof.circleimageview.CircleImageView
 
 class AddContactsFragment : BaseFragment(R.layout.fragment_add_contacts) {
     private lateinit var mRecyclerView: RecyclerView
