@@ -1,4 +1,4 @@
-package com.example.lotlinmessenger.ui.fragments.register
+package com.example.lotlinmessenger.ui.screens.register
 
 import android.widget.Button
 import android.widget.EditText

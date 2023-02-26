@@ -1,4 +1,4 @@
-package com.example.lotlinmessenger.ui.fragments.single_chat
+package com.example.lotlinmessenger.ui.screens.single_chat
 
 import android.view.LayoutInflater
 import android.view.View

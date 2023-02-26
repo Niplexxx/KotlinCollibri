@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.models.CommonModel
-import com.example.lotlinmessenger.ui.fragments.single_chat.SingleChatFragment
+import com.example.lotlinmessenger.ui.screens.single_chat.SingleChatFragment
 import com.example.lotlinmessenger.utillits.downloadAndSetImage
 import com.example.lotlinmessenger.utillits.replaceFragment
 import de.hdodenhof.circleimageview.CircleImageView

@@ -11,7 +11,7 @@ import androidx.core.net.toUri
 import com.canhub.cropper.CropImage
 import com.example.lotlinmessenger.databinding.ActivityMainBinding
 import com.example.lotlinmessenger.ui.screens.main_list.MainListFragment
-import com.example.lotlinmessenger.ui.fragments.register.EnterPhoneNumberFragment
+import com.example.lotlinmessenger.ui.screens.register.EnterPhoneNumberFragment
 import com.example.lotlinmessenger.ui.objects.AppDrawer
 import com.example.lotlinmessenger.utillits.*
 import kotlinx.coroutines.CoroutineScope

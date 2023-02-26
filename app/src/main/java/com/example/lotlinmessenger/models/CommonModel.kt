@@ -10,6 +10,7 @@ data class CommonModel(
     var photoUrl: String = "empty",
     var fileUrl: String = "empty",
     var lastMessage:String = "",
+    var choice:Boolean = false,
 
     //Message
     var text: String = "",
