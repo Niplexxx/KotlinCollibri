@@ -1,11 +1,13 @@
 package com.example.lotlinmessenger.ui.fragments.single_chat
 
+import android.Manifest.permission.RECORD_AUDIO
+import android.annotation.SuppressLint
 import android.text.style.TtsSpan.TYPE_TEXT
-import android.view.View
 import android.widget.AbsListView
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -16,6 +18,12 @@ import com.example.lotlinmessenger.ui.fragments.BaseFragment
 import com.example.lotlinmessenger.utillits.*
 import com.google.firebase.database.DatabaseReference
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import android.net.Uri
+import android.view.*
+import com.example.lotlinmessenger.ui.screens.main_list.MainListFragment
 
 
 class SingleChatFragment(private var contact: CommonModel) :
@@ -34,6 +42,7 @@ class SingleChatFragment(private var contact: CommonModel) :
     private var mSmoothScrollToPosition = true
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var mLayoutManager: LinearLayoutManager
+    private lateinit var mAppVoiceRecorder: AppVoiceRecorder
 
     override fun onResume() {
         super.onResume()
@@ -42,9 +51,52 @@ class SingleChatFragment(private var contact: CommonModel) :
         initRecycleView()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initFields() {
+        setHasOptionsMenu(true)
+        mAppVoiceRecorder = AppVoiceRecorder()
         mSwipeRefreshLayout = view?.findViewById<SwipeRefreshLayout>(R.id.chat_swipe_refresh)!!
         mLayoutManager = LinearLayoutManager(this.context)
+        view?.findViewById<EditText>(R.id.chat_input_message)
+            ?.addTextChangedListener(AppTextWatcher {
+                val string = view?.findViewById<EditText>(R.id.chat_input_message)?.text.toString()
+                if (string.isEmpty()) {
+                    view?.findViewById<ImageView>(R.id.chat_btn_send_message)?.visibility =
+                        View.GONE
+                    view?.findViewById<ImageView>(R.id.chat_btn_voice)?.visibility = View.VISIBLE
+                } else {
+                    view?.findViewById<ImageView>(R.id.chat_btn_send_message)?.visibility =
+                        View.VISIBLE
+                    view?.findViewById<ImageView>(R.id.chat_btn_voice)?.visibility = View.GONE
+                }
+            })
+
+
+            CoroutineScope(Dispatchers.IO).launch {
+            view?.findViewById<ImageView>(R.id.chat_btn_voice)?.setOnTouchListener { v, event ->
+                if (checkPermission(RECORD_AUDIO)) {
+                    if (event.action == MotionEvent.ACTION_DOWN) {
+                            //TODO record
+                        view?.findViewById<ImageView>(R.id.chat_btn_voice)?.setColorFilter(
+                            ContextCompat.getColor(
+                                APP_ACTIVITY,
+                                R.color.teal_200
+                            )
+                        )
+                        val messageKey = getMessageKey(contact.id)
+                        mAppVoiceRecorder.startRecord(messageKey)
+                    } else if (event.action == MotionEvent.ACTION_UP) {
+                            //TODO stop record
+                            view?.findViewById<ImageView>(R.id.chat_btn_voice)?.colorFilter = null
+                            mAppVoiceRecorder.stopRecord { file, messageKey ->
+                                uploadFileToStorage(Uri.fromFile(file),messageKey)
+                            }
+                        }
+                    }
+                    true
+                }
+            }
+
     }
 
     private fun initRecycleView() {
@@ -118,6 +170,7 @@ class SingleChatFragment(private var contact: CommonModel) :
             if (message.isEmpty()) {
                 showToast("Введите сообщение")
             } else sendMessage(message, contact.id, TYPE_TEXT) {
+                saveToMainList(contact.id, TYPE_CHAT)
                 view?.findViewById<EditText>(R.id.chat_input_message)?.setText("")
             }
         }
@@ -140,5 +193,28 @@ class SingleChatFragment(private var contact: CommonModel) :
         mRefMessages.removeEventListener(mMessagesListener)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mAppVoiceRecorder.releaseRecorder()
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        /* Создания выпадающего меню*/
+        activity?.menuInflater?.inflate(R.menu.single_chat_action_menu, menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        /* Слушатель выбора пунктов выпадающего меню */
+        when (item.itemId) {
+
+            R.id.menu_clear_chat -> clearChat(contact.id){
+                showToast("Чат очищен")
+                replaceFragment(MainListFragment())
+            }
+            R.id.menu_delete_chat -> deleteChat(contact.id){
+                showToast("Чат удален")
+                replaceFragment(MainListFragment())
+            }
+        }
+        return true
+    }
 }

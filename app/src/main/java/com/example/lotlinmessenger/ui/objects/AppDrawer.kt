@@ -8,7 +8,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.ui.fragments.ContactsFragment
 import com.example.lotlinmessenger.ui.fragments.InformationFragment
-import com.example.lotlinmessenger.ui.fragments.SettingsFragment
+import com.example.lotlinmessenger.ui.screens.settings.SettingsFragment
 import com.example.lotlinmessenger.utillits.APP_ACTIVITY
 import com.example.lotlinmessenger.utillits.USER
 import com.example.lotlinmessenger.utillits.downloadAndSetImage
@@ -105,7 +105,7 @@ class AppDrawer {
                 //Menu block 2
                 PrimaryDrawerItem().withIdentifier(101)
                     .withIconTintingEnabled(true)
-                    .withName("Личные сообщения")
+                    .withName("Мои контакты")
                     .withSelectable(false)
                     .withIcon(R.drawable.img_personal_chat),
                 //Menu block 3

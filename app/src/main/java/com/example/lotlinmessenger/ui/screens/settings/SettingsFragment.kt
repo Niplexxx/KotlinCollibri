@@ -1,23 +1,16 @@
-package com.example.lotlinmessenger.ui.fragments
+package com.example.lotlinmessenger.ui.screens.settings
 
-import android.app.Activity
-import android.app.Activity.RESULT_OK
-import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.net.toUri
-import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import com.example.lotlinmessenger.MainActivity
 import com.example.lotlinmessenger.R
+import com.example.lotlinmessenger.ui.fragments.BaseFragment
 import com.example.lotlinmessenger.utillits.*
 import com.mikepenz.materialize.util.KeyboardUtil
 import de.hdodenhof.circleimageview.CircleImageView

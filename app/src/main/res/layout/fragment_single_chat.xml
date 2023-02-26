@@ -35,8 +35,8 @@
         android:textColor="@color/colorBlack"
         android:textColorHint="@color/material_drawer_hint_text"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/chat_btn_send_message"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/chat_btn_voice"
+        app:layout_constraintStart_toEndOf="@+id/chat_btn_attach" />
 
     <ImageView
         android:id="@+id/chat_btn_send_message"
@@ -44,9 +44,29 @@
         android:layout_height="0dp"
         android:padding="@dimen/appPadding"
         android:src="@drawable/img_send"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/chat_input_message" />
 
+    <ImageView
+        android:id="@+id/chat_btn_attach"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:padding="@dimen/appPadding"
+        android:src="@drawable/img_attach"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/chat_input_message"
+        app:layout_constraintVertical_bias="0.0" />
 
+    <ImageView
+        android:id="@+id/chat_btn_voice"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:padding="@dimen/appPadding"
+        android:src="@drawable/img_voice"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/chat_input_message" />
 </androidx.constraintlayout.widget.ConstraintLayout>
