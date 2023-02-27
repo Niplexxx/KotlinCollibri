@@ -2,7 +2,7 @@ package com.example.lotlinmessenger.ui.screens.groups
 
 import android.Manifest.permission.RECORD_AUDIO
 import android.annotation.SuppressLint
-import android.text.style.TtsSpan.TYPE_TEXT
+import android.content.Intent
 import android.widget.AbsListView
 import android.widget.EditText
 import android.widget.ImageView
@@ -14,7 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.models.CommonModel
 import com.example.lotlinmessenger.models.UserModel
-import com.example.lotlinmessenger.ui.fragments.BaseFragment
+import com.example.lotlinmessenger.ui.screens.base.BaseFragment
 import com.example.lotlinmessenger.utillits.*
 import com.google.firebase.database.DatabaseReference
 import de.hdodenhof.circleimageview.CircleImageView
@@ -23,8 +23,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.net.Uri
 import android.view.*
+import android.widget.LinearLayout
+import com.canhub.cropper.CropImage
 import com.example.lotlinmessenger.database.*
+import com.example.lotlinmessenger.ui.fragments.message_recycler_view.views.AppViewFactory
 import com.example.lotlinmessenger.ui.screens.main_list.MainListFragment
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 
 class GroupChatFragment(private val group: CommonModel) :
@@ -44,6 +48,7 @@ class GroupChatFragment(private val group: CommonModel) :
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var mLayoutManager: LinearLayoutManager
     private lateinit var mAppVoiceRecorder: AppVoiceRecorder
+    private lateinit var mBottomSheetBehavior: BottomSheetBehavior<*>
 
     override fun onResume() {
         super.onResume()
@@ -55,59 +60,81 @@ class GroupChatFragment(private val group: CommonModel) :
     @SuppressLint("ClickableViewAccessibility")
     private fun initFields() {
         setHasOptionsMenu(true)
+        mBottomSheetBehavior= BottomSheetBehavior.from(view?.findViewById(R.id.bottom_sheet_choice)!!)
+        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         mAppVoiceRecorder = AppVoiceRecorder()
-        mSwipeRefreshLayout = view?.findViewById<SwipeRefreshLayout>(R.id.chat_swipe_refresh)!!
+        mSwipeRefreshLayout = view?.findViewById(R.id.chat_swipe_refresh)!!
         mLayoutManager = LinearLayoutManager(this.context)
-        view?.findViewById<EditText>(R.id.chat_input_message)
-            ?.addTextChangedListener(AppTextWatcher {
-                val string = view?.findViewById<EditText>(R.id.chat_input_message)?.text.toString()
-                if (string.isEmpty()) {
-                    view?.findViewById<ImageView>(R.id.chat_btn_send_message)?.visibility =
-                        View.GONE
-                    view?.findViewById<ImageView>(R.id.chat_btn_voice)?.visibility = View.VISIBLE
-                } else {
-                    view?.findViewById<ImageView>(R.id.chat_btn_send_message)?.visibility =
-                        View.VISIBLE
-                    view?.findViewById<ImageView>(R.id.chat_btn_voice)?.visibility = View.GONE
-                }
-            })
+        view?.findViewById<EditText>(R.id.chat_input_message)?.addTextChangedListener(AppTextWatcher {
+            val string = view?.findViewById<EditText>(R.id.chat_input_message)?.text.toString()
+            if (string.isEmpty() || string == "Запись") {
+                view?.findViewById<ImageView>(R.id.chat_btn_send_message)?.visibility = View.GONE
+                view?.findViewById<ImageView>(R.id.chat_btn_attach)?.visibility = View.VISIBLE
+                view?.findViewById<ImageView>(R.id.chat_btn_voice)?.visibility = View.VISIBLE
+            } else {
+                view?.findViewById<ImageView>(R.id.chat_btn_send_message)?.visibility = View.VISIBLE
+                view?.findViewById<ImageView>(R.id.chat_btn_attach)?.visibility = View.GONE
+                view?.findViewById<ImageView>(R.id.chat_btn_voice)?.visibility = View.GONE
+            }
+        })
 
+        view?.findViewById<ImageView>(R.id.chat_btn_attach)?.setOnClickListener { attach() }
 
-            CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             view?.findViewById<ImageView>(R.id.chat_btn_voice)?.setOnTouchListener { v, event ->
                 if (checkPermission(RECORD_AUDIO)) {
                     if (event.action == MotionEvent.ACTION_DOWN) {
-                            //TODO record
+                        view?.findViewById<EditText>(R.id.chat_input_message)?.setText("Запись")
                         view?.findViewById<ImageView>(R.id.chat_btn_voice)?.setColorFilter(
                             ContextCompat.getColor(
                                 APP_ACTIVITY,
-                                R.color.teal_200
+                                R.color.teal_700
                             )
                         )
                         val messageKey = getMessageKey(group.id)
                         mAppVoiceRecorder.startRecord(messageKey)
                     } else if (event.action == MotionEvent.ACTION_UP) {
-                            //TODO stop record
-                            view?.findViewById<ImageView>(R.id.chat_btn_voice)?.colorFilter = null
-                            mAppVoiceRecorder.stopRecord { file, messageKey ->
-                                uploadFileToStorage(Uri.fromFile(file),messageKey,group.id, TYPE_MESSAGE_VOICE)
-                                mSmoothScrollToPosition = true
-                            }
+                        view?.findViewById<EditText>(R.id.chat_input_message)?.setText("")
+                        view?.findViewById<ImageView>(R.id.chat_btn_voice)?.colorFilter = null
+                        mAppVoiceRecorder.stopRecord { file, messageKey ->
+                            uploadFileToStorage(Uri.fromFile(file),messageKey,group.id, TYPE_MESSAGE_VOICE)
+                            mSmoothScrollToPosition = true
                         }
                     }
-                    true
                 }
+                true
             }
+        }
+
+    }
+
+    private fun attach() {
+        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        view?.findViewById<ImageView>(R.id.btn_attach_file)?.setOnClickListener { attachFile() }
+        view?.findViewById<ImageView>(R.id.btn_attach_image)?.setOnClickListener { attachImage() }
+    }
+
+    private fun attachFile(){
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "*/*"
+        startActivityForResult(intent, PICK_FILE_REQUEST_CODE)
+    }
+
+
+    private fun attachImage() {
 
     }
 
     private fun initRecycleView() {
-        mRecyclerView = view?.findViewById<RecyclerView>(R.id.chat_recycle_view)!!
+        mRecyclerView = view?.findViewById<RecyclerView>(R.id.chat_recycle_view) !!
         mAdapter = GroupChatAdapter()
+
+
         mRefMessages = REF_DATABASE_ROOT
             .child(NODE_GROUPS)
             .child(group.id)
             .child(NODE_MESSAGES)
+
         mRecyclerView.adapter = mAdapter
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.isNestedScrollingEnabled = false
@@ -116,14 +143,15 @@ class GroupChatFragment(private val group: CommonModel) :
             val message = it.getCommonModel()
 
             if (mSmoothScrollToPosition) {
-                mAdapter.addItemToBottom(message) {
+                mAdapter.addItemToBottom(AppViewFactory.getView(message)) {
                     mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)
                 }
             } else {
-                mAdapter.addItemToTop(message) {
+                mAdapter.addItemToTop(AppViewFactory.getView(message)) {
                     mSwipeRefreshLayout.isRefreshing = false
                 }
             }
+
         }
         mRefMessages.limitToLast(mCountMessages).addChildEventListener(mMessagesListener)
 
@@ -144,6 +172,8 @@ class GroupChatFragment(private val group: CommonModel) :
                 }
             }
         })
+
+
         mSwipeRefreshLayout.setOnRefreshListener { updateData() }
     }
 
@@ -156,26 +186,28 @@ class GroupChatFragment(private val group: CommonModel) :
     }
 
     private fun initToolbar() {
-        mToolbarInfo = APP_ACTIVITY.mToolbar.findViewById<View>(R.id.toolbar_info)
+        mToolbarInfo = APP_ACTIVITY.mToolbar.findViewById(R.id.toolbar_info)
         mToolbarInfo.visibility = View.VISIBLE
         mListenerInfoToolbar = AppValueEventListener {
             mReceivingUser = it.getUserModel()
             initInfoToolbar()
         }
 
-        mRefUser = REF_DATABASE_ROOT.child(NODE_USERS).child(group.id)
+        mRefUser = REF_DATABASE_ROOT.child(
+            NODE_USERS
+        ).child(group.id)
         mRefUser.addValueEventListener(mListenerInfoToolbar)
 
         view?.findViewById<ImageView>(R.id.chat_btn_send_message)?.setOnClickListener {
             mSmoothScrollToPosition = true
             val message = view?.findViewById<EditText>(R.id.chat_input_message)?.text.toString()
             if (message.isEmpty()) {
-                showToast("Введите сообщение")
+                showToast("ВВедите сообщение")
             } else sendMessageToGroup(
                 message,
                 group.id,
                 TYPE_TEXT
-            ){
+            ) {
                 view?.findViewById<EditText>(R.id.chat_input_message)?.setText("")
             }
         }
@@ -184,11 +216,31 @@ class GroupChatFragment(private val group: CommonModel) :
     private fun initInfoToolbar() {
         if (mReceivingUser.fullname.isEmpty()) {
             mToolbarInfo.findViewById<TextView>(R.id.toolbar_chat_fullname).text = group.fullname
-        } else mToolbarInfo.findViewById<TextView>(R.id.toolbar_chat_fullname).text =
-            mReceivingUser.fullname
-        mToolbarInfo.findViewById<CircleImageView>(R.id.toolbar_chat_image)
-            .downloadAndSetImage(mReceivingUser.photoUrl)
+        } else mToolbarInfo.findViewById<TextView>(R.id.toolbar_chat_fullname).text = mReceivingUser.fullname
+
+        mToolbarInfo.findViewById<ImageView>(R.id.toolbar_chat_image).downloadAndSetImage(mReceivingUser.photoUrl)
         mToolbarInfo.findViewById<TextView>(R.id.toolbar_chat_status).text = mReceivingUser.state
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        /* Активность которая запускается для получения картинки для фото пользователя */
+        super.onActivityResult(requestCode, resultCode, data)
+        if (data!=null){
+            when(requestCode){
+                CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
+                    val messageKey = getMessageKey(group.id)
+                    mSmoothScrollToPosition = true
+                }
+
+                PICK_FILE_REQUEST_CODE -> {
+                    val uri = data.data
+                    val messageKey = getMessageKey(group.id)
+                    val filename = getFilenameFromUri(uri!!)
+                    uploadFileToStorage(uri,messageKey,group.id, TYPE_MESSAGE_FILE,filename)
+                    mSmoothScrollToPosition = true
+                }
+            }
+        }
     }
 
     override fun onPause() {
@@ -201,17 +253,18 @@ class GroupChatFragment(private val group: CommonModel) :
     override fun onDestroyView() {
         super.onDestroyView()
         mAppVoiceRecorder.releaseRecorder()
+        mAdapter.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         /* Создания выпадающего меню*/
         activity?.menuInflater?.inflate(R.menu.single_chat_action_menu, menu)
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         /* Слушатель выбора пунктов выпадающего меню */
         when (item.itemId) {
-
-            R.id.menu_clear_chat -> clearChat(group.id){
+            R.id.menu_clear_chat -> clearChatGroup(group.id){
                 showToast("Чат очищен")
                 replaceFragment(MainListFragment())
             }

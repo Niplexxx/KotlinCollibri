@@ -1,5 +1,7 @@
 package com.example.lotlinmessenger.models
 
+/* Модель для User*/
+
 data class UserModel(
     val id: String = "",
     var username: String = "",

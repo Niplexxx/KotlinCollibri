@@ -8,13 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.database.createGroupToDatabase
 import com.example.lotlinmessenger.models.CommonModel
-import com.example.lotlinmessenger.ui.fragments.BaseFragment
+import com.example.lotlinmessenger.ui.screens.base.BaseFragment
 import com.example.lotlinmessenger.ui.screens.main_list.MainListFragment
 import com.example.lotlinmessenger.utillits.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mikepenz.materialize.util.KeyboardUtil.hideKeyboard
 
-class CreateGroupFragment(private var listContacts:List<CommonModel>): BaseFragment(R.layout.fragment_create_group) {
+class CreateGroupFragment(private var listContacts:List<CommonModel>)
+    :BaseFragment(R.layout.fragment_create_group) {
 
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: AddContactsAdapter

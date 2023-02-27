@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.database.*
 import com.example.lotlinmessenger.models.CommonModel
-import com.example.lotlinmessenger.ui.fragments.BaseFragment
+import com.example.lotlinmessenger.ui.screens.base.BaseFragment
 import com.example.lotlinmessenger.utillits.*
 import com.mikepenz.materialize.util.KeyboardUtil.hideKeyboard
 

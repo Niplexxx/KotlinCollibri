@@ -3,8 +3,12 @@
 package com.example.lotlinmessenger.utillits
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.provider.ContactsContract
+import android.provider.OpenableColumns
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -12,10 +16,20 @@ import com.example.lotlinmessenger.MainActivity
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.database.*
 import com.example.lotlinmessenger.models.CommonModel
+import com.example.lotlinmessenger.models.UserModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
+import java.io.File
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
+
+/* Файл для хранения утилитарных функции, доступных во всем приложении */
 
 fun showToast(message: String) {
     /* Функция показывает сообщение */
@@ -23,12 +37,14 @@ fun showToast(message: String) {
 }
 
 fun restartActivity() {
+    /* Функция расширения для AppCompatActivity, позволяет запускать активити */
     val intent = Intent(APP_ACTIVITY, MainActivity::class.java)
     APP_ACTIVITY.startActivity(intent)
     APP_ACTIVITY.finish()
 }
 
 fun replaceFragment(fragment: Fragment, addStack: Boolean = true) {
+    /* Функция расширения для AppCompatActivity, позволяет устанавливать фрагменты */
     if (addStack) {
         APP_ACTIVITY.supportFragmentManager.beginTransaction()
             .addToBackStack(null)
@@ -46,16 +62,26 @@ fun replaceFragment(fragment: Fragment, addStack: Boolean = true) {
 
 }
 
+
+fun hideKeyboard() {
+    /* Функция скрывает клавиатуру */
+    val imm: InputMethodManager = APP_ACTIVITY.getSystemService(Context.INPUT_METHOD_SERVICE)
+            as InputMethodManager
+    imm.hideSoftInputFromWindow(APP_ACTIVITY.window.decorView.windowToken, 0)
+}
+
 fun ImageView.downloadAndSetImage(url: String) {
+    /* Функция раширения ImageView, скачивает и устанавливает картинку*/
     Picasso.get()
         .load(url)
         .fit()
-        .placeholder(R.drawable.img_people)
+        .placeholder(R.drawable.default_photo)
         .into(this)
 }
 
 @SuppressLint("Range")
 fun initContacts() {
+    /* Функция считывает контакты с телефонной книги, хаполняет массив arrayContacts моделями CommonModel */
     if (checkPermission(READ_CONTACTS)) {
         var arrayContacts = arrayListOf<CommonModel>()
         val cursor = APP_ACTIVITY.contentResolver.query(
@@ -89,27 +115,23 @@ fun String.asTime(): String {
     return timeFormat.format(time)
 }
 
+@SuppressLint("Range")
+fun getFilenameFromUri(uri: Uri): String {
+    var result = ""
+    val cursor = APP_ACTIVITY.contentResolver.query(uri, null, null, null, null)
+    try {
+        if (cursor != null && cursor.moveToFirst()) {
+            result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+        }
+    } catch (e: Exception) {
+        showToast(e.message.toString())
+    } finally {
+        cursor?.close()
+        return result
+    }
+}
+
 fun getPlurals(count:Int) = APP_ACTIVITY.resources.getQuantityString(
     R.plurals.count_members,count,count
 )
 
-fun sendMessageToGroup(message: String, groupID: String, typeText: String, function: () -> Unit) {
-
-    var refMessages = "$NODE_GROUPS/$groupID/$NODE_MESSAGES"
-    val messageKey = REF_DATABASE_ROOT.child(refMessages).push().key
-
-    val mapMessage = hashMapOf<String, Any>()
-    mapMessage[CHILD_FROM] =
-        CURRENT_UID
-    mapMessage[CHILD_TYPE] = typeText
-    mapMessage[CHILD_TEXT] = message
-    mapMessage[CHILD_ID] = messageKey.toString()
-    mapMessage[CHILD_TIMESTAMP] =
-        ServerValue.TIMESTAMP
-
-    REF_DATABASE_ROOT.child(refMessages).child(messageKey.toString())
-        .updateChildren(mapMessage)
-        .addOnSuccessListener { function() }
-        .addOnFailureListener { showToast(it.message.toString()) }
-
-}

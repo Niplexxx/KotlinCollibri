@@ -19,48 +19,49 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mBinding: ActivityMainBinding
     lateinit var mAppDrawer: AppDrawer
     lateinit var mToolbar: Toolbar
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        /* Функция запускается один раз, при создании активити */
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         APP_ACTIVITY = this
         initFirebase()
         initUser {
-            REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
             CoroutineScope(Dispatchers.IO).launch {
                 initContacts()
             }
             initFields()
             initFunc()
         }
+
     }
 
-    //Menu function
+
+
     private fun initFunc() {
+        /* Функция инициализирует функциональность приложения */
         setSupportActionBar(mToolbar)
         if (AUTH.currentUser != null) {
             mAppDrawer.create()
             replaceFragment(MainListFragment(), false)
         } else {
-            replaceFragment(EnterPhoneNumberFragment(), false)
+            replaceFragment(EnterPhoneNumberFragment(),false)
         }
     }
 
     private fun initFields() {
+        /* Функция инициализирует переменные */
         mToolbar = mBinding.mainToolbar
         mAppDrawer = AppDrawer()
     }
 
     override fun onStart() {
         super.onStart()
-        APP_ACTIVITY =this
         AppStates.updateState(AppStates.ONLINE)
     }
 
@@ -75,21 +76,8 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (ContextCompat.checkSelfPermission(
-                APP_ACTIVITY,
-                READ_CONTACTS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(APP_ACTIVITY, READ_CONTACTS)==PackageManager.PERMISSION_GRANTED){
             initContacts()
         }
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-            if (resultCode == RESULT_OK) {
-                val uri = CropImage.getCaptureImageOutputUriContent(this)
-                val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)
-                    .child(CURRENT_UID)
-            }
-        }
-    }
+}

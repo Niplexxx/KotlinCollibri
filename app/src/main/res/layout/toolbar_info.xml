@@ -10,8 +10,7 @@
         android:id="@+id/toolbar_chat_image"
         android:layout_width="@dimen/toolbar_image_width"
         android:layout_height="@dimen/toolbar_image_height"
-        android:src="@drawable/img_user_default"
-        app:civ_circle_background_color="@color/material_default"
+        android:src="@drawable/default_photo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,7 +23,7 @@
         android:textColor="@color/white"
         app:layout_constraintStart_toEndOf="@+id/toolbar_chat_image"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Yura Petrov" />
+        tools:text="Аня" />
 
     <TextView
         android:id="@+id/toolbar_chat_status"

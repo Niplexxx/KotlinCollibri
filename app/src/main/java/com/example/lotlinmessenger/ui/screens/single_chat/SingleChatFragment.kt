@@ -2,6 +2,7 @@ package com.example.lotlinmessenger.ui.screens.single_chat
 
 import android.Manifest.permission.RECORD_AUDIO
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.text.style.TtsSpan.TYPE_TEXT
 import android.widget.AbsListView
 import android.widget.EditText
@@ -14,7 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.lotlinmessenger.R
 import com.example.lotlinmessenger.models.CommonModel
 import com.example.lotlinmessenger.models.UserModel
-import com.example.lotlinmessenger.ui.fragments.BaseFragment
+import com.example.lotlinmessenger.ui.screens.base.BaseFragment
 import com.example.lotlinmessenger.utillits.*
 import com.google.firebase.database.DatabaseReference
 import de.hdodenhof.circleimageview.CircleImageView
@@ -23,8 +24,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.net.Uri
 import android.view.*
+import com.canhub.cropper.CropImage
 import com.example.lotlinmessenger.database.*
+import com.example.lotlinmessenger.ui.fragments.message_recycler_view.views.AppViewFactory
 import com.example.lotlinmessenger.ui.screens.main_list.MainListFragment
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 
 class SingleChatFragment(private var contact: CommonModel) :
@@ -44,6 +48,7 @@ class SingleChatFragment(private var contact: CommonModel) :
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var mLayoutManager: LinearLayoutManager
     private lateinit var mAppVoiceRecorder: AppVoiceRecorder
+    private lateinit var mBottomSheetBehavior: BottomSheetBehavior<*>
 
     override fun onResume() {
         super.onResume()
@@ -54,9 +59,11 @@ class SingleChatFragment(private var contact: CommonModel) :
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initFields() {
+        mBottomSheetBehavior= BottomSheetBehavior.from(view?.findViewById(R.id.bottom_sheet_choice) !!)
+        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         setHasOptionsMenu(true)
         mAppVoiceRecorder = AppVoiceRecorder()
-        mSwipeRefreshLayout = view?.findViewById<SwipeRefreshLayout>(R.id.chat_swipe_refresh)!!
+        mSwipeRefreshLayout = view?.findViewById(R.id.chat_swipe_refresh)!!
         mLayoutManager = LinearLayoutManager(this.context)
         view?.findViewById<EditText>(R.id.chat_input_message)
             ?.addTextChangedListener(AppTextWatcher {
@@ -94,10 +101,39 @@ class SingleChatFragment(private var contact: CommonModel) :
                     true
                 }
             }
+        view?.findViewById<ImageView>(R.id.chat_btn_attach)?.setOnClickListener { attach() }
+    }
+
+    private fun attach() {
+        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        view?.findViewById<ImageView>(R.id.btn_attach_file)?.setOnClickListener { attachFile() }
+    }
+
+    private fun attachFile() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "*/*"
+        startActivityForResult(intent, PICK_FILE_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        /* Активность которая запускается для получения файла */
+        super.onActivityResult(requestCode, resultCode, data)
+        if (data!=null){
+            when(requestCode){
+                PICK_FILE_REQUEST_CODE -> {
+                    val uri = data.data
+                    val messageKey = getMessageKey(contact.id)
+                    val filename = getFilenameFromUri(uri!!)
+                    uploadFileToStorage(uri,messageKey,contact.id, TYPE_MESSAGE_FILE,filename)
+                    uri?.let { uploadFileToStorage(it,messageKey,contact.id, TYPE_MESSAGE_FILE) }
+                    mSmoothScrollToPosition = true
+                }
+            }
+        }
     }
 
     private fun initRecycleView() {
-        mRecyclerView = view?.findViewById<RecyclerView>(R.id.chat_recycle_view)!!
+        mRecyclerView = view?.findViewById(R.id.chat_recycle_view) !!
         mAdapter = SingleChatAdapter()
         mRefMessages = REF_DATABASE_ROOT
             .child(NODE_MESSAGES)
@@ -111,14 +147,15 @@ class SingleChatFragment(private var contact: CommonModel) :
             val message = it.getCommonModel()
 
             if (mSmoothScrollToPosition) {
-                mAdapter.addItemToBottom(message) {
+                mAdapter.addItemToBottom(AppViewFactory.getView(message)) {
                     mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)
                 }
             } else {
-                mAdapter.addItemToTop(message) {
+                mAdapter.addItemToTop(AppViewFactory.getView(message)) {
                     mSwipeRefreshLayout.isRefreshing = false
                 }
             }
+
         }
         mRefMessages.limitToLast(mCountMessages).addChildEventListener(mMessagesListener)
 
@@ -139,6 +176,8 @@ class SingleChatFragment(private var contact: CommonModel) :
                 }
             }
         })
+
+
         mSwipeRefreshLayout.setOnRefreshListener { updateData() }
     }
 
@@ -193,6 +232,7 @@ class SingleChatFragment(private var contact: CommonModel) :
     override fun onDestroyView() {
         super.onDestroyView()
         mAppVoiceRecorder.releaseRecorder()
+        mAdapter.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
